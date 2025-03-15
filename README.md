@@ -1,24 +1,29 @@
-# Location API
+# Location API Routes
 
-This API provides a set of routes for managing locations and finding routes between two locations.
+This API provides routes for managing locations and retrieving routes between two locations.
 
-## API Routes
+## Routes
 
-### 1. **Get All Locations**
-- **Endpoint:** `GET|HEAD /api/locations`
-- **Controller Action:** `LocationController@index`
-- **Description:** Retrieves a list of all locations.
-- **Response:** A JSON array of location objects.
+- **GET|HEAD** `api/locations`  
+  **Action:** `locations.index` › `LocationController@index`  
+  **Description:** Retrieves a list of all locations.
 
-### 2. **Create a New Location**
-- **Endpoint:** `POST /api/locations`
-- **Controller Action:** `LocationController@store`
-- **Description:** Creates a new location with the provided data.
-- **Request Body:**
-  ```json
-  {
-    "name": "Location Name",
-    "latitude": "Lat",
-    "longitude": "Long",
-    "color": "Hex Decimal Color"
-  }
+- **POST** `api/locations`  
+  **Action:** `locations.store` › `LocationController@store`  
+  **Description:** Creates a new location.
+
+- **GET|HEAD** `api/locations/{location}`  
+  **Action:** `locations.show` › `LocationController@show`  
+  **Description:** Retrieves details of a specific location.
+
+- **PUT|PATCH** `api/locations/{location}`  
+  **Action:** `locations.update` › `LocationController@update`  
+  **Description:** Updates a specific location.
+
+- **DELETE** `api/locations/{location}`  
+  **Action:** `locations.destroy` › `LocationController@destroy`  
+  **Description:** Deletes a specific location.
+
+- **GET|HEAD** `api/route/{id1}/{id2}`  
+  **Action:** `LocationController@getRouteBetweenTwoLocations`  
+  **Description:** Retrieves the route between two locations.
