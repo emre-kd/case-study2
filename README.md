@@ -7,3 +7,6 @@
 - `DELETE` `api/locations/{location}` ............................ `locations.destroy` › `LocationController@destroy`
 - `GET|HEAD` `api/route/{id1}/{id2}` ............................... `LocationController@getRouteBetweenTwoLocations`
 
+**Not**: Dakika başına 10 istek sınırı var.
+- `'throttle:10,1'`  
+
