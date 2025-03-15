@@ -1,29 +1,29 @@
-# Location API Routes
+# Konum API Yolları
 
-This API provides routes for managing locations and retrieving routes between two locations.
+Bu API, konumları yönetmek ve iki konum arasındaki rotaları almak için çeşitli yollar sunar.
 
-## Routes
+## Yollar
 
-- **GET|HEAD** `api/locations`  
-  **Action:** `locations.index` › `LocationController@index`  
-  **Description:** Retrieves a list of all locations.
+### 1. **GET|HEAD `/api/locations`**
+   - **Aksiyon:** `LocationController@index`
+   - **Açıklama:** Tüm konumların listesini alır.
 
-- **POST** `api/locations`  
-  **Action:** `locations.store` › `LocationController@store`  
-  **Description:** Creates a new location.
+### 2. **POST `/api/locations`**
+   - **Aksiyon:** `LocationController@store`
+   - **Açıklama:** Yeni bir konum oluşturur.
 
-- **GET|HEAD** `api/locations/{location}`  
-  **Action:** `locations.show` › `LocationController@show`  
-  **Description:** Retrieves details of a specific location.
+### 3. **GET|HEAD `/api/locations/{location}`**
+   - **Aksiyon:** `LocationController@show`
+   - **Açıklama:** Belirli bir konumun detaylarını ID'si ile alır.
 
-- **PUT|PATCH** `api/locations/{location}`  
-  **Action:** `locations.update` › `LocationController@update`  
-  **Description:** Updates a specific location.
+### 4. **PUT|PATCH `/api/locations/{location}`**
+   - **Aksiyon:** `LocationController@update`
+   - **Açıklama:** Belirli bir konumun bilgilerini ID'si ile günceller.
 
-- **DELETE** `api/locations/{location}`  
-  **Action:** `locations.destroy` › `LocationController@destroy`  
-  **Description:** Deletes a specific location.
+### 5. **DELETE `/api/locations/{location}`**
+   - **Aksiyon:** `LocationController@destroy`
+   - **Açıklama:** Belirli bir konumu ID'si ile siler.
 
-- **GET|HEAD** `api/route/{id1}/{id2}`  
-  **Action:** `LocationController@getRouteBetweenTwoLocations`  
-  **Description:** Retrieves the route between two locations.
+### 6. **GET|HEAD `/api/route/{id1}/{id2}`**
+   - **Aksiyon:** `LocationController@getRouteBetweenTwoLocations`
+   - **Açıklama:** İki konum arasındaki rotayı, her birinin ID'si ile alır.
