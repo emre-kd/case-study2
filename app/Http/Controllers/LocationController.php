@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreLocationRequest;
 use App\Http\Requests\UpdateLocationRequest;
 use App\Models\Location;
+use Illuminate\Support\Facades\Validator;
+
 
 
 
@@ -26,54 +28,112 @@ class LocationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function getRouteBetweenTwoLocations($id1, $id2)
+    public function getRouteBetweenTwoLocations($id1, Request $request)
     {
 
-
-
         $location1 = Location::find($id1);
-        $location2 = Location::find($id2);
 
-        if (!$location1 || !$location2) {
-            return response()->json([
-                'message' => 'One or both locations not found'
-            ], 404);
+        $validator = Validator::make($request->all(), [
+            'latitude2' => 'required|numeric|min:-90|max:90',
+            'longitude2' => 'required|numeric|min:-180|max:180',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $distance = $this->haversineDistance($location1->latitude, $location1->longitude, $location2->latitude, $location2->longitude);
+        if (!$location1) {
+            return response()->json(['error' => 'Location not found'], 404);
+        }
 
+
+        // Get the validated latitude2 and longitude2
+        $latitude2 = $request->input('latitude2');
+        $longitude2 = $request->input('longitude2');
+
+        // Create a dummy location for the second location using the provided latitude and longitude
+        $location2 = new \stdClass();
+        $location2->latitude = $latitude2;
+        $location2->longitude = $longitude2;
+
+        // Optionally, you can give it a name if needed (this is just an example)
+        $location2->name = 'Location 2';
+
+        return view('route', compact('location1', 'location2'));
+
+
+    }
+
+    public function getRouteBetweenTwoLocationsApi($id1, Request $request)
+    {
+        // Find the first location by its ID
+        $location1 = Location::find($id1);
+
+        // Validate the latitude2 and longitude2 parameters
+        $validator = Validator::make($request->all(), [
+            'latitude2' => 'required|numeric|min:-90|max:90',
+            'longitude2' => 'required|numeric|min:-180|max:180',
+        ]);
+
+        // If validation fails, return an error
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        // If location1 is not found, return an error
+        if (!$location1) {
+            return response()->json(['error' => 'Location not found'], 404);
+        }
+
+        // Get the validated latitude2 and longitude2 from the request
+        $latitude2 = $request->input('latitude2');
+        $longitude2 = $request->input('longitude2');
+
+        // Create a dummy location for the second location
+        $location2 = new \stdClass();
+        $location2->latitude = $latitude2;
+        $location2->longitude = $longitude2;
+        $location2->name = 'Your Location'; // Optional name for the second location
+
+        // Calculate the distance between location1 and location2
+        $distance = $this->calculateDistance($location1->latitude, $location1->longitude, $latitude2, $longitude2);
+
+        // Return the response with both locations and the calculated distance
         return response()->json([
-            'from' => [
-                'id' => $location1->id,
-                'name' => $location1->name,
-                'latitude' => $location1->latitude,
-                'longitude' => $location1->longitude
-            ],
-            'to' => [
-                'id' => $location2->id,
-                'name' => $location2->name,
-                'latitude' => $location2->latitude,
-                'longitude' => $location2->longitude
-            ],
+            'Selected Location' => $location1,
+            'Recieved Location' => $location2,
             'distance_km' => $distance
         ]);
     }
 
-    private function haversineDistance($lat1, $lng1, $lat2, $lng2)
-    {
-        $earthRadius = 6371; // Earth's radius in KM
+     // Function to calculate the distance between two geographical points
+     public function calculateDistance($latitude1, $longitude1, $latitude2, $longitude2)
+     {
+         $earthRadius = 6371; // Earth radius in kilometers
 
-        $dLat = deg2rad($lat2 - $lat1);
-        $dLng = deg2rad($lng2 - $lng1);
+         // Convert latitude and longitude from degrees to radians
+         $lat1 = deg2rad($latitude1);
+         $lon1 = deg2rad($longitude1);
+         $lat2 = deg2rad($latitude2);
+         $lon2 = deg2rad($longitude2);
 
-        $a = sin($dLat / 2) * sin($dLat / 2) +
-            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-            sin($dLng / 2) * sin($dLng / 2);
+         // Differences in coordinates
+         $dlat = $lat2 - $lat1;
+         $dlon = $lon2 - $lon1;
 
-        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+         // Haversine formula
+         $a = sin($dlat / 2) * sin($dlat / 2) +
+              cos($lat1) * cos($lat2) *
+              sin($dlon / 2) * sin($dlon / 2);
+         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
 
-        return $earthRadius * $c; // Distance in KM
-    }
+         // Distance in kilometers
+         $distance = $earthRadius * $c;
+
+         return $distance;
+     }
+
+
 
 
     /**

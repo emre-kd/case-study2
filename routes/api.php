@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/route/{id1}', [LocationController::class, 'getRouteBetweenTwoLocationsApi'])->name('route.between.locations');
 
 Route::apiResource('locations', LocationController::class);
-Route::get('/route/{id1}/{id2}', [LocationController::class, 'getRouteBetweenTwoLocations'])->name('route.between.locations');
