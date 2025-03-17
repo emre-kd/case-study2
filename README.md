@@ -15,7 +15,7 @@
 **Not**: Örnek Routelar
 
 **Görsel Olarak**
-/route/5?latitude2=50.712776&longitude2=3.00597
+- `/route/5?latitude2=50.712776&longitude2=3.00597`
 
 **API**
-/api/route/5?latitude2=50.712776&longitude2=3.00597
+- `/api/route/5?latitude2=50.712776&longitude2=3.00597`
