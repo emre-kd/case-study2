@@ -5,8 +5,17 @@
 - `GET|HEAD` `api/locations/{location}` .................................. `locations.show` › `LocationController@show`
 - `PUT|PATCH` `api/locations/{location}` .............................. `locations.update` › `LocationController@update`
 - `DELETE` `api/locations/{location}` ............................ `locations.destroy` › `LocationController@destroy`
-- `GET|HEAD` `api/route/{id1}/{id2}` ............................... `route.between.locations` › `LocationController@getRouteBetweenTwoLocations`
+- `GET|HEAD` `api/route/{id1}` ............................... `route.between.locations` › `LocationController@getRouteBetweenTwoLocationsApi`
+- `GET|HEAD` `route/{id1}` ............................... `route.between.locations` › `LocationController@getRouteBetweenTwoLocations`
+
 
 **Not**: Dakika başına 10 istek sınırı var.
-- `'throttle:10,1'`  
+- `'throttle:10,1'`
 
+**Not**: Örnek Routelar
+
+**Görsel Olarak**
+/route/5?latitude2=50.712776&longitude2=3.00597
+
+**API**
+/api/route/5?latitude2=50.712776&longitude2=3.00597
